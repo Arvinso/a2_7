@@ -11,35 +11,39 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <sys/types.h>
 
 #define FILENAME "thefile"
 
 int main()
 {
-	int *fptr;
+	int fptr;
 	time_t rawtime;
 	struct tm *timeinfo;
 
-	char *buff;
+	char buff[20];
+	fptr = open(FILENAME,  O_WRONLY);
 
-
-	fptr = fopen(FILENAME, "w");
-
-	if(fptr == NULL)
+	if(fptr < 0)
 	{
-		perror("fopen");
+		perror("open()");
 		exit(EXIT_FAILURE);
-		return 1;
 	}
 
 	time (&rawtime);
 	timeinfo = localtime (&rawtime);
 
-	buff = asctime(timeinfo);
+	strcpy(&buff,asctime(timeinfo));
 
-	printf(buff);
+	if(write(fptr, buff, strlen(buff)) < 0)
+	{
+		perror("write()");
+		exit(EXIT_FAILURE);
+	}
 
-	write(fptr, &buff, sizeof(buff));
+	printf("written to file: %s", asctime(timeinfo));
+
+	close(fptr);
 
 	return 0;
 }
