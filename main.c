@@ -1,10 +1,3 @@
-/*
- * main.c
- *
- *  Created on: 2017-02-13
- *      Author: wierie
- */
-
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -32,7 +25,6 @@ int main()
 
 	time (&rawtime);
 	timeinfo = localtime (&rawtime);
-
 	strcpy(&buff,asctime(timeinfo));
 
 	if(write(fptr, buff, strlen(buff)) < 0)
